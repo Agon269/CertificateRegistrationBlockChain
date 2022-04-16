@@ -158,7 +158,7 @@ function NavBar() {
 export default NavBar;
 
 const navigation = [
-  { name: "Validate Certificate", href: "#", current: false },
+  { name: "Validate Certificate", href: "/validatecert", current: false },
   //   { name: "Calendar", href: "#", current: false },
 ];
 
