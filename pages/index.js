@@ -34,7 +34,7 @@ export default function Home() {
                 src="https://tailwindui.com/img/component-images/full-width-with-sidebar.jpg"
                 alt="App screenshot"
               /> */}
-              <Image src={SampleCert} height={2000} width={2300} />
+              {/* <Image src={SampleCert} height={2000} width={2300} /> */}
             </div>
           </div>
         </div>
