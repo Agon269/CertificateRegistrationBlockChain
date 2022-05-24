@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import { abi, contractAddress } from "./util";
 export async function fetchUserDataApi(formData) {
   const currentProvider = detectCurrentProvider();
   if (currentProvider) {
@@ -82,7 +83,33 @@ export const registerCertificateApi = async (formData) => {
     const account = userAccount[0];
     let ethBalance = await web3.eth.getBalance(account);
     ethBalance = web3.utils.fromWei(ethBalance, "ether");
-    console.log(formData, "api");
-    //connect with smart contract here
+
+    web3.eth.defaultAccount = account;
+    console.log(web3.eth.defaultAccount);
+    try {
+      let cert = await new web3.eth.Contract(abi, contractAddress);
+      await cert.methods
+        .setCertificate(
+          formData.name,
+          formData.desc,
+          formData.awarder,
+          formData.awardee,
+          formData.remark,
+          2
+        )
+        .send({ from: web3.eth.defaultAccount })
+        .on("error", (error) => {
+          console.log(error.message);
+        })
+        .on("receipt", (receipt) => {
+          let returnData = {
+            name: receipt.events.Certificate.returnValues.name,
+            level: receipt.events.Certificate.returnValues.level,
+          };
+          console.log(returnData);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   }
 };
