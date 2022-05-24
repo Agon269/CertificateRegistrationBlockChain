@@ -1,10 +1,23 @@
-import React from "react";
+import { useEffect } from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, signOut, signIn } from "../features/user/userslice";
+import Jazzicon from "react-jazzicon";
 function NavBar() {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  useEffect(() => {
+    function checkConnectedWallet() {
+      const userData = JSON.parse(localStorage.getItem("userAccount"));
+      if (userData != null) {
+        dispatch(signIn(userData));
+      }
+    }
+    checkConnectedWallet();
+  }, []);
   return (
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (
@@ -52,26 +65,22 @@ function NavBar() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
-                  {/* USER IS AUTHENTICATED */}
-                  {/* <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div> */}
-                  <div>
-                    <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                  {user.connected ? (
+                    <div>
+                      <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span className="sr-only">Open user menu</span>
+                        <Jazzicon diameter={50} seed={user.image} />
+                      </Menu.Button>
+                    </div>
+                  ) : (
+                    <span className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
                       <Link href="/Auth" passHref>
                         Sign in
                       </Link>
-                    </button>
-                  </div>
+                    </span>
+                  )}
+
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -84,42 +93,15 @@ function NavBar() {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <Link
-                            passHref
-                            href="#"
+                          <span
                             className={classNames(
                               active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              "block px-4 py-2 text-sm text-gray-700 hover:cursor-pointer"
                             )}
+                            onClick={() => dispatch(signOut())}
                           >
-                            Your Profile
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Sign out
-                          </Link>
+                            Sing out
+                          </span>
                         )}
                       </Menu.Item>
                     </Menu.Items>

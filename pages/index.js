@@ -1,10 +1,22 @@
+import { useEffect } from "react";
 import NavBar from "../components/NavBar";
-import Image from "next/image";
-import SampleCert from "../public/certholder.png";
 import Steps from "../components/Steps";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, signIn } from "../features/user/userslice";
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  useEffect(() => {
+    function checkConnectedWallet() {
+      const userData = JSON.parse(localStorage.getItem("userAccount"));
+      if (userData != null) {
+        dispatch(signIn(userData));
+      }
+    }
+    checkConnectedWallet();
+  }, []);
   return (
     <>
       <NavBar />
@@ -22,19 +34,17 @@ export default function Home() {
                   consectetur. Malesuada adipiscing sagittis vel nulla nec.
                 </p>
                 <span className="mt-8 bg-white border border-transparent rounded-md shadow px-5 py-3 inline-flex items-center text-base font-medium text-red-600 hover:bg-red-50">
-                  <Link href="/Auth" passHref>
-                    Sign up for free
-                  </Link>
+                  {user.connected ? (
+                    <Link href="/registercertifcate" passHref>
+                      Register Certificate
+                    </Link>
+                  ) : (
+                    <Link href="/Auth" passHref>
+                      Sign up for free
+                    </Link>
+                  )}
                 </span>
               </div>
-            </div>
-            <div className="-mt-6 aspect-w-5 aspect-h-3 md:aspect-w-2 md:aspect-h-1">
-              {/* <img
-                className="transform translate-x-6 translate-y-6 rounded-md object-cover object-left-top sm:translate-x-16 lg:translate-y-20"
-                src="https://tailwindui.com/img/component-images/full-width-with-sidebar.jpg"
-                alt="App screenshot"
-              /> */}
-              <Image src={SampleCert} height={2000} width={2300} />
             </div>
           </div>
         </div>

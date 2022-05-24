@@ -3,19 +3,19 @@ import { CheckIcon } from "@heroicons/react/solid";
 const steps = [
   {
     name: "Create account",
-    description: "Vitae sed mi luctus laoreet.",
+    description: "Just Register with Meta Mask.",
     href: "#",
     status: "complete",
   },
   {
     name: "Create a certificate template",
-    description: "Cursus semper viverra facilisis et et some more.",
+    description: "Create the Template of your Choice",
     href: "#",
     status: "complete",
   },
   {
     name: "Register Certificate",
-    description: "Penatibus eu quis ante.",
+    description: "Register users using templates",
     href: "#",
     status: "complete",
   },
