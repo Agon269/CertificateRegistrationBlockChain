@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchUserDataApi, signOutApi } from "./userapi";
+import {
+  fetchUserDataApi,
+  signOutApi,
+  registerCertificateApi,
+} from "./userapi";
 const initialState = {
   address: "",
   connected: false,
@@ -7,6 +11,7 @@ const initialState = {
   balance: "",
   image: "",
   status: "idle",
+  certificate: [],
 };
 export const authUser = createAsyncThunk("user/autUser", async (formData) => {
   const res = await fetchUserDataApi(formData);
@@ -15,6 +20,17 @@ export const authUser = createAsyncThunk("user/autUser", async (formData) => {
   }
   return res;
 });
+
+export const registerCertificate = createAsyncThunk(
+  "user/certreg",
+  async (formData) => {
+    const res = await registerCertificateApi(formData);
+    if (res.error) {
+      return res;
+    }
+    return res;
+  }
+);
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -47,6 +63,9 @@ export const userSlice = createSlice({
         state.balance = action.payload.balance;
         state.institution = action.payload.institution;
         state.image = action.payload.image;
+      })
+      .addCase(registerCertificate.fulfilled, (state, action) => {
+        console.log(action.payload);
       });
   },
 });
