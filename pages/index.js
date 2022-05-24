@@ -35,7 +35,7 @@ export default function Home() {
                 </p>
                 <span className="mt-8 bg-white border border-transparent rounded-md shadow px-5 py-3 inline-flex items-center text-base font-medium text-red-600 hover:bg-red-50">
                   {user.connected ? (
-                    <Link href="/registercertifcate" passHref>
+                    <Link href="/createtemplate" passHref>
                       Register Certificate
                     </Link>
                   ) : (

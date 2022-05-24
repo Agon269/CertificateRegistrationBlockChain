@@ -62,9 +62,27 @@ const saveUserInfo = (ethBalance, account, chainId, image, institution) => {
     institution,
   };
   window.localStorage.setItem("userAccount", JSON.stringify(userAccount));
-  const userData = JSON.parse(localStorage.getItem("userAccount"));
 };
 
 export const signOutApi = () => {
   window.localStorage.removeItem("userAccount");
+};
+
+export const registerCertificateApi = async (formData) => {
+  const currentProvider = detectCurrentProvider();
+  if (currentProvider) {
+    if (currentProvider !== window.ethereum) {
+      console.log(
+        "Non-Ethereum browser detected. You should consider trying MetaMask!"
+      );
+    }
+    await currentProvider.request({ method: "eth_requestAccounts" });
+    const web3 = new Web3(currentProvider);
+    const userAccount = await web3.eth.getAccounts();
+    const account = userAccount[0];
+    let ethBalance = await web3.eth.getBalance(account);
+    ethBalance = web3.utils.fromWei(ethBalance, "ether");
+    console.log(formData, "api");
+    //connect with smart contract here
+  }
 };
