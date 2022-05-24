@@ -1,15 +1,23 @@
-import React from "react";
+import { useEffect } from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, signOut } from "../features/user/userslice";
-
+import { selectUser, signOut, signIn } from "../features/user/userslice";
+import Jazzicon from "react-jazzicon";
 function NavBar() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-
+  useEffect(() => {
+    function checkConnectedWallet() {
+      const userData = JSON.parse(localStorage.getItem("userAccount"));
+      if (userData != null) {
+        dispatch(signIn(userData));
+      }
+    }
+    checkConnectedWallet();
+  }, []);
   return (
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (
@@ -62,11 +70,7 @@ function NavBar() {
                     <div>
                       <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
+                        <Jazzicon diameter={50} seed={user.image} />
                       </Menu.Button>
                     </div>
                   ) : (

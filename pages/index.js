@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, signIn } from "../features/user/userslice";
 
 export default function Home() {
-  const disatch = useDispatch();
+  const dispatch = useDispatch();
   const user = useSelector(selectUser);
   useEffect(() => {
     function checkConnectedWallet() {
       const userData = JSON.parse(localStorage.getItem("userAccount"));
       if (userData != null) {
-        disatch(signIn(userData));
+        dispatch(signIn(userData));
       }
     }
     checkConnectedWallet();

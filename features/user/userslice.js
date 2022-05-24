@@ -3,12 +3,13 @@ import { fetchUserDataApi, signOutApi } from "./userapi";
 const initialState = {
   address: "",
   connected: false,
-  institution: [],
+  institution: "",
   balance: "",
+  image: "",
   status: "idle",
 };
-export const authUser = createAsyncThunk("user/autUser", async () => {
-  const res = await fetchUserDataApi();
+export const authUser = createAsyncThunk("user/autUser", async (formData) => {
+  const res = await fetchUserDataApi(formData);
   if (res.error) {
     return res;
   }
@@ -27,7 +28,8 @@ export const userSlice = createSlice({
       state.connected = true;
       state.address = action.payload.account;
       state.balance = action.payload.balance;
-      // state.institution = action.payload.institution;
+      state.institution = action.payload.institution;
+      state.image = action.payload.image;
     },
   },
   extraReducers: (builder) => {
@@ -43,6 +45,8 @@ export const userSlice = createSlice({
         state.connected = true;
         state.address = action.payload.account;
         state.balance = action.payload.balance;
+        state.institution = action.payload.institution;
+        state.image = action.payload.image;
       });
   },
 });

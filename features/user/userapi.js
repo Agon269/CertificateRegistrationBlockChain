@@ -1,5 +1,5 @@
 import Web3 from "web3";
-export async function fetchUserDataApi() {
+export async function fetchUserDataApi(formData) {
   const currentProvider = detectCurrentProvider();
   if (currentProvider) {
     if (currentProvider !== window.ethereum) {
@@ -14,7 +14,13 @@ export async function fetchUserDataApi() {
     const account = userAccount[0];
     let ethBalance = await web3.eth.getBalance(account); // Get wallet balance
     ethBalance = web3.utils.fromWei(ethBalance, "ether"); //Convert balance to wei
-    saveUserInfo(ethBalance, account, chainId);
+    saveUserInfo(
+      ethBalance,
+      account,
+      chainId,
+      formData.image,
+      formData.institution
+    );
 
     if (userAccount.length === 0) {
       console.log("Please connect to meta mask");
@@ -23,8 +29,10 @@ export async function fetchUserDataApi() {
       account: account,
       balance: ethBalance,
       connectionid: chainId,
+      institution: formData.institution,
+      image: formData.image,
     };
-    console.log(userInfo);
+
     return userInfo;
   } else {
     return "error";
@@ -45,11 +53,13 @@ export const detectCurrentProvider = () => {
 
   return provider;
 };
-const saveUserInfo = (ethBalance, account, chainId) => {
+const saveUserInfo = (ethBalance, account, chainId, image, institution) => {
   const userAccount = {
     account: account,
     balance: ethBalance,
     connectionid: chainId,
+    image,
+    institution,
   };
   window.localStorage.setItem("userAccount", JSON.stringify(userAccount));
   const userData = JSON.parse(localStorage.getItem("userAccount"));
