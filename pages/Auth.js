@@ -2,7 +2,11 @@ import React from "react";
 import Image from "next/image";
 import Logo from "../public/metamask.svg";
 import NavBar from "../components/NavBar";
+import { authUser } from "../features/user/userslice";
+import { useDispatch } from "react-redux";
 function Auth() {
+  const dispatch = useDispatch();
+
   return (
     <>
       <NavBar />
@@ -14,7 +18,10 @@ function Auth() {
             </h1>
           </div>
           <div className="mt-8 space-y-6 mx-auto">
-            <button className="mt-6 text-center text-1xl text-gray-900 border-2  ">
+            <button
+              className="mt-6 text-center text-1xl text-gray-900 border-2  "
+              onClick={() => dispatch(authUser())}
+            >
               <Image src={Logo} />
             </button>
           </div>
