@@ -13,6 +13,7 @@
     "@heroicons/react": "^1.0.6",
     "@metamask/jazzicon": "^2.0.0",
     "@reduxjs/toolkit": "^1.8.1",
+    "bcryptjs": "^2.4.3",
     "heroicons": "^1.0.6",
     "next": "12.1.2",
     "react": "17.0.2",

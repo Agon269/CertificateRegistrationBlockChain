@@ -104,6 +104,20 @@ function NavBar() {
                           </span>
                         )}
                       </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <span
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700 hover:cursor-pointer"
+                            )}
+                          >
+                            <Link passHref href={"/mycerts"}>
+                              My Certificates
+                            </Link>
+                          </span>
+                        )}
+                      </Menu.Item>
                     </Menu.Items>
                   </Transition>
                 </Menu>

@@ -47,7 +47,8 @@ contract Cert is CertificationOwner {
             string awardee,
             string awarder,
             string remark,
-            address owner
+            address owner,
+            string id
         );
 
     modifier checkLevel(uint _level){  
@@ -71,7 +72,7 @@ contract Cert is CertificationOwner {
             holders[_id].owner = _owner;
             holderAccts.push(_owner);
             owners[_owner].ids.push(_id);
-            emit HolderInfo(_name,_level,_desc, _awarder, _awardee, _remark,_owner);
+            emit HolderInfo(_name,_level,_desc, _awarder, _awardee, _remark,_owner,_id);
         }
 
         function getHolders()view public returns(address[] memory){
