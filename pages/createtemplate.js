@@ -12,6 +12,7 @@ function createTemplate() {
     remark: "",
     awarder: "",
     awardee: "",
+    level: "",
   });
   const createCert = (e) => {
     e.preventDefault();
@@ -68,14 +69,14 @@ function createTemplate() {
                     htmlFor="about"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Description of the certificate
+                    Descriptsion of the certificate
                   </label>
                   <div className="mt-1">
                     <textarea
                       id="about"
                       name="desc"
                       rows={3}
-                      className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                      className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
                       defaultValue={""}
                       onChange={(e) => handleChange(e)}
                       required
@@ -96,7 +97,7 @@ function createTemplate() {
                       id="about"
                       name="remark"
                       rows={3}
-                      className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                      className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
                       defaultValue={""}
                       onChange={(e) => handleChange(e)}
                       required
@@ -134,6 +135,27 @@ function createTemplate() {
                   <input
                     type="text"
                     name="awardee"
+                    id="first-name"
+                    autoComplete="given-name"
+                    className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border border-gray-300 rounded-md  p-2"
+                    onChange={(e) => handleChange(e)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="sm:col-span-3 mt-4">
+                <label
+                  htmlFor="first-name"
+                  className="block text-sm font-medium text-gray-700 mt-2"
+                >
+                  Level
+                </label>
+                <div className="mt-1">
+                  <input
+                    type="number"
+                    name="level"
+                    min={1}
+                    max={3}
                     id="first-name"
                     autoComplete="given-name"
                     className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border border-gray-300 rounded-md  p-2"

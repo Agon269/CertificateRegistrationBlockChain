@@ -85,7 +85,7 @@ export const registerCertificateApi = async (formData) => {
     ethBalance = web3.utils.fromWei(ethBalance, "ether");
 
     web3.eth.defaultAccount = account;
-    console.log(web3.eth.defaultAccount);
+
     try {
       let cert = await new web3.eth.Contract(abi, contractAddress);
       await cert.methods
@@ -95,7 +95,7 @@ export const registerCertificateApi = async (formData) => {
           formData.awarder,
           formData.awardee,
           formData.remark,
-          2
+          formData.level
         )
         .send({ from: web3.eth.defaultAccount })
         .on("error", (error) => {
@@ -105,6 +105,10 @@ export const registerCertificateApi = async (formData) => {
           let returnData = {
             name: receipt.events.Certificate.returnValues.name,
             level: receipt.events.Certificate.returnValues.level,
+            awardee: receipt.events.Certificate.returnValues.awardee,
+            awarder: receipt.events.Certificate.returnValues.awarder,
+            desc: receipt.events.Certificate.returnValues.desc,
+            remark: receipt.events.Certificate.returnValues.remark,
           };
           console.log(returnData);
         });
