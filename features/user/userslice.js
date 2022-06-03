@@ -4,6 +4,7 @@ import {
   signOutApi,
   registerCertificateApi,
   getUserCertsApi,
+  getCertAPi,
 } from "./userapi";
 const initialState = {
   address: "",
@@ -13,6 +14,7 @@ const initialState = {
   image: "",
   status: "idle",
   certificates: [],
+  currentCert: {},
 };
 export const authUser = createAsyncThunk("user/autUser", async (formData) => {
   const res = await fetchUserDataApi(formData);
@@ -43,7 +45,13 @@ export const getUserCertificates = createAsyncThunk(
     return res;
   }
 );
-
+export const getCertificate = createAsyncThunk("user/getcert", async (id) => {
+  const res = await getCertAPi(id);
+  if (res.error) {
+    return res;
+  }
+  return res;
+});
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -82,6 +90,9 @@ export const userSlice = createSlice({
       })
       .addCase(getUserCertificates.fulfilled, (state, action) => {
         state.certificates = action.payload;
+      })
+      .addCase(getCertificate.fulfilled, (state, action) => {
+        state.currentCert = action.payload;
       });
   },
 });

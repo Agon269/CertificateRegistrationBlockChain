@@ -1,5 +1,7 @@
 import Web3 from "web3";
 import { abi, contractAddress, hash, makeid } from "./util";
+import { ethers, Wallet } from "ethers";
+
 export async function fetchUserDataApi(formData) {
   const currentProvider = detectCurrentProvider();
   if (currentProvider) {
@@ -87,9 +89,11 @@ export const registerCertificateApi = async (formData) => {
 
     web3.eth.defaultAccount = account;
     //testing string here
-    let randomString = makeid(6);
-    let Id = await hash(randomString);
-
+    // let randomString = makeid(6);
+    // let Id = await hash(randomString);
+    const randomMnemonic = ethers.Wallet.createRandom().mnemonic;
+    const wallet = ethers.Wallet.fromMnemonic(randomMnemonic.phrase);
+    const Id = wallet.address;
     try {
       let cert = await new web3.eth.Contract(abi, contractAddress);
       await cert.methods
@@ -155,6 +159,7 @@ export const getUserCertsApi = async () => {
           awardee: temp["3"],
           awarder: temp["4"],
           institution: temp["5"],
+          //get id here as well
         };
         contracts = [...contracts, { ...obj }];
       }
@@ -163,5 +168,45 @@ export const getUserCertsApi = async () => {
       console.log(e);
     }
   }
-  return ["1"];
+  return { error: "something went wrong" };
+};
+
+export const getCertAPi = async (id) => {
+  const currentProvider = detectCurrentProvider();
+  if (currentProvider) {
+    if (currentProvider !== window.ethereum) {
+      console.log(
+        "Non-Ethereum browser detected. You should consider trying MetaMask!"
+      );
+    }
+
+    await currentProvider.request({ method: "eth_requestAccounts" });
+    const web3 = new Web3(currentProvider);
+    const userAccount = await web3.eth.getAccounts();
+    const account = userAccount[0];
+    let ethBalance = await web3.eth.getBalance(account);
+    ethBalance = web3.utils.fromWei(ethBalance, "ether");
+
+    web3.eth.defaultAccount = account;
+
+    try {
+      let cert = await new web3.eth.Contract(abi, contractAddress);
+
+      let registeredCertificate = await cert.methods.getCertificate(id).call();
+      let obj = {
+        certName: registeredCertificate["0"],
+        level: registeredCertificate["1"],
+        description: registeredCertificate["2"],
+        awardee: registeredCertificate["3"],
+        awarder: registeredCertificate["4"],
+        remark: registeredCertificate["5"],
+        //get id here as well
+      };
+      return obj;
+    } catch (e) {
+      console.log(e);
+      return { error: "something went wrong" };
+    }
+  }
+  return { error: "something went wrong" };
 };
