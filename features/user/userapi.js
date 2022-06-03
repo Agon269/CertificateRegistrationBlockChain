@@ -94,6 +94,7 @@ export const registerCertificateApi = async (formData) => {
     const randomMnemonic = ethers.Wallet.createRandom().mnemonic;
     const wallet = ethers.Wallet.fromMnemonic(randomMnemonic.phrase);
     const Id = wallet.address;
+    let returnData;
     try {
       let cert = await new web3.eth.Contract(abi, contractAddress);
       await cert.methods
@@ -112,21 +113,23 @@ export const registerCertificateApi = async (formData) => {
           console.log(error.message);
         })
         .on("receipt", (receipt) => {
-          let returnData = {
-            name: receipt.events.HolderInfo.returnValues.name,
+          returnData = {
+            certName: receipt.events.HolderInfo.returnValues.name,
             level: receipt.events.HolderInfo.returnValues.level,
             awardee: receipt.events.HolderInfo.returnValues.awardee,
             awarder: receipt.events.HolderInfo.returnValues.awarder,
             desc: receipt.events.HolderInfo.returnValues.desc,
             remark: receipt.events.HolderInfo.returnValues.remark,
+            id: Id,
           };
-          console.log(returnData);
-          return returnData;
+          console.log(returnData, "here in api");
         });
     } catch (e) {
       console.log(e);
+      return { error: "something went wrong" };
     }
   }
+  return returnData;
 };
 
 export const getUserCertsApi = async () => {
@@ -159,6 +162,7 @@ export const getUserCertsApi = async () => {
           awardee: temp["3"],
           awarder: temp["4"],
           institution: temp["5"],
+          id: Ids[i],
           //get id here as well
         };
         contracts = [...contracts, { ...obj }];
@@ -200,7 +204,7 @@ export const getCertAPi = async (id) => {
         awardee: registeredCertificate["3"],
         awarder: registeredCertificate["4"],
         remark: registeredCertificate["5"],
-        //get id here as well
+        id,
       };
       return obj;
     } catch (e) {

@@ -15,6 +15,7 @@ const initialState = {
   status: "idle",
   certificates: [],
   currentCert: {},
+  searchResult: [],
 };
 export const authUser = createAsyncThunk("user/autUser", async (formData) => {
   const res = await fetchUserDataApi(formData);
@@ -46,6 +47,13 @@ export const getUserCertificates = createAsyncThunk(
   }
 );
 export const getCertificate = createAsyncThunk("user/getcert", async (id) => {
+  const res = await getCertAPi(id);
+  if (res.error) {
+    return res;
+  }
+  return res;
+});
+export const searchCert = createAsyncThunk("user/search", async (id) => {
   const res = await getCertAPi(id);
   if (res.error) {
     return res;
@@ -86,13 +94,20 @@ export const userSlice = createSlice({
         state.image = action.payload.image;
       })
       .addCase(registerCertificate.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.currentCert = action.payload;
       })
       .addCase(getUserCertificates.fulfilled, (state, action) => {
         state.certificates = action.payload;
       })
       .addCase(getCertificate.fulfilled, (state, action) => {
         state.currentCert = action.payload;
+      })
+      .addCase(searchCert.fulfilled, (state, action) => {
+        if (action.payload.certName !== "") {
+          state.searchResult = [action.payload];
+        } else {
+          state.searchResult = "";
+        }
       });
   },
 });

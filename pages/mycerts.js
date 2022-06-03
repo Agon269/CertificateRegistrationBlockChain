@@ -25,7 +25,7 @@ function mycontracts() {
                   key={certifcate.awardee}
                   className="col-span-1 flex flex-col text-center bg-gray-200 rounded-lg shadow divide-y divide-gray-200 hover:cursor-pointer hover:shadow-lg"
                 >
-                  <Link href={`/cert${certifcate.certName}`} passHref>
+                  <Link href={`/cert/${certifcate.id}`} passHref>
                     <div className="flex-1 flex flex-col p-8">
                       <h3 className="mt-6 text-gray-900 text-sm font-medium">
                         {certifcate.certName}

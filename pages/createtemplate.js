@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar";
@@ -6,6 +7,7 @@ import { registerCertificate, selectUser } from "../features/user/userslice";
 function createTemplate() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     desc: "",
@@ -14,10 +16,12 @@ function createTemplate() {
     awardee: "",
     level: "",
   });
-  const createCert = (e) => {
+  const createCert = async (e) => {
     e.preventDefault();
     formData.institution = user.institution;
-    dispatch(registerCertificate(formData));
+    await dispatch(registerCertificate(formData));
+
+    router.push(`/cert/${user.currentCert.id}`);
   };
   const handleChange = (e) => {
     setFormData((prevState) => {
